@@ -1,0 +1,110 @@
+﻿[
+    {
+        "asset":  "rock_face_03",
+        "channel":  "Diffuse",
+        "file":  "rock_face_03_diffuse.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_diff_1k.jpg",
+        "md5":  "e4c34abb1aad5befe12754fad507147a",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/rock_face_03"
+    },
+    {
+        "asset":  "rock_face_03",
+        "channel":  "nor_gl",
+        "file":  "rock_face_03_nor_gl.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_nor_gl_1k.jpg",
+        "md5":  "cbd30858439ece391480c5e67e09de89",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/rock_face_03"
+    },
+    {
+        "asset":  "rock_face_03",
+        "channel":  "arm",
+        "file":  "rock_face_03_arm.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_arm_1k.jpg",
+        "md5":  "351c58daba868568fb5a191194aa5302",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/rock_face_03"
+    },
+    {
+        "asset":  "rusty_metal_03",
+        "channel":  "Diffuse",
+        "file":  "rusty_metal_03_diffuse.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_03/rusty_metal_03_diff_1k.jpg",
+        "md5":  "32165054d3f6a81d81e3d7aec59181da",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/rusty_metal_03"
+    },
+    {
+        "asset":  "rusty_metal_03",
+        "channel":  "nor_gl",
+        "file":  "rusty_metal_03_nor_gl.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_03/rusty_metal_03_nor_gl_1k.jpg",
+        "md5":  "a9de126b02dc45d674664cf85764519f",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/rusty_metal_03"
+    },
+    {
+        "asset":  "rusty_metal_03",
+        "channel":  "arm",
+        "file":  "rusty_metal_03_arm.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_03/rusty_metal_03_arm_1k.jpg",
+        "md5":  "85131770f95545fa745601ecf6fe637a",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/rusty_metal_03"
+    },
+    {
+        "asset":  "weathered_planks",
+        "channel":  "Diffuse",
+        "file":  "weathered_planks_diffuse.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_planks/weathered_planks_diff_1k.jpg",
+        "md5":  "5d7c9e7088bfa54490ba03ba15b660d8",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/weathered_planks"
+    },
+    {
+        "asset":  "weathered_planks",
+        "channel":  "nor_gl",
+        "file":  "weathered_planks_nor_gl.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_planks/weathered_planks_nor_gl_1k.jpg",
+        "md5":  "119541f6b143f21f0a6e9774e9208905",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/weathered_planks"
+    },
+    {
+        "asset":  "weathered_planks",
+        "channel":  "arm",
+        "file":  "weathered_planks_arm.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_planks/weathered_planks_arm_1k.jpg",
+        "md5":  "54f44833fd158b22c3419d416debc113",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/weathered_planks"
+    },
+    {
+        "asset":  "coral_ground_02",
+        "channel":  "Diffuse",
+        "file":  "coral_ground_02_diffuse.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/coral_ground_02/coral_ground_02_diff_1k.jpg",
+        "md5":  "3719bc1f7806d18f83d6c2d7b81e0513",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/coral_ground_02"
+    },
+    {
+        "asset":  "coral_ground_02",
+        "channel":  "nor_gl",
+        "file":  "coral_ground_02_nor_gl.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/coral_ground_02/coral_ground_02_nor_gl_1k.jpg",
+        "md5":  "d0465c5d837b9e00529e146dbdf90dc7",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/coral_ground_02"
+    },
+    {
+        "asset":  "coral_ground_02",
+        "channel":  "arm",
+        "file":  "coral_ground_02_arm.jpg",
+        "source":  "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/coral_ground_02/coral_ground_02_arm_1k.jpg",
+        "md5":  "5365d267df936d2b3b6a96a39dd14eee",
+        "license":  "CC0-1.0",
+        "page":  "https://polyhaven.com/a/coral_ground_02"
+    }
+]
