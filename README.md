@@ -1,5 +1,5 @@
 # Open Ocean Descent
-# DISCLAIMER: MAY LAG/FREEZE ON WEAKER DEVICES, DO NOT RUN IF YOUR LAPTOP IS NOT STRONG ENOUGH
+# DISCLAIMER: MAY LAG/FREEZE ON WEAKER DEVICES, DO NOT RUN IF YOUR UNIT IS NOT STRONG ENOUGH
 
 **[Launch the ocean simulation](https://danieluwilliams.github.io/Simulations/)**
 
