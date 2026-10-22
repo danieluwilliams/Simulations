@@ -1,0 +1,121 @@
+<title>Open Ocean Descent</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Creepster&family=Share+Tech+Mono&family=Fraunces:opsz,wght@9..144,300;9..144,500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+  /* Layout: full-bleed WebGL canvas; dive-computer HUD pinned to corners; depth gauge rail on the right. */
+  :root {
+    --abyss: #02070d;
+    --hud: #bfe9ff;
+    --hud-dim: rgba(191, 233, 255, 0.55);
+    --hud-faint: rgba(191, 233, 255, 0.18);
+    --warn: #ffb35c;
+    --panel: rgba(4, 14, 24, 0.42);
+    --font-robo: "Share Tech Mono", ui-monospace, "Consolas", monospace;
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "IBM Plex Sans", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body { background: var(--abyss); color: var(--hud); font-family: var(--font-body); overflow: hidden; }
+  #c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+
+  .hud { position: fixed; pointer-events: none; font-family: var(--font-robo); color: var(--hud); text-shadow: 0 0 6px rgba(0, 20, 40, 0.8); }
+  #depthbox { top: calc(14px + env(safe-area-inset-top, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 2px; font-size: 12px; letter-spacing: 0.08em; }
+  #feet { font-size: 15px; letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+  #feet b { font-weight: 400; color: #fff; }
+  .sub { color: var(--hud-dim); font-size: 11px; font-variant-numeric: tabular-nums; }
+  #zone { color: var(--hud); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; margin-top: 4px; }
+  #rate { font-size: 11px; color: var(--hud-dim); }
+
+  #gauge { top: 50%; right: max(16px, env(safe-area-inset-right, 0px)); transform: translateY(-50%); height: min(70vh, 560px); width: 120px; pointer-events: auto; cursor: pointer; }
+  #gauge .rail { position: absolute; right: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(#7fd4ff, #1d6fa3 14%, #0b2f52 35%, #061629 60%, #020509); border-radius: 2px; }
+  #gauge .tick { position: absolute; right: 16px; transform: translateY(-50%); font-size: 10px; color: var(--hud-dim); white-space: nowrap; letter-spacing: 0.06em; text-align: right; }
+  #gauge .tick:hover { color: #fff; }
+  #gauge .tick::after { content: ""; position: absolute; right: -10px; top: 50%; width: 6px; height: 1px; background: var(--hud-dim); }
+  #gauge .me { position: absolute; right: 3px; width: 12px; height: 12px; margin-top: -6px; border: 1px solid #fff; border-radius: 50%; box-shadow: 0 0 8px #9fe3ff; transition: top 0.1s linear; }
+
+  #hint { left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); font-size: 11px; color: var(--hud-dim); line-height: 1.6; letter-spacing: 0.04em; transition: opacity 1.2s; }
+  #hint kbd { font-family: var(--font-robo); color: var(--hud); border: 1px solid var(--hud-faint); padding: 0 4px; border-radius: 3px; }
+  #status { right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); font-size: 11px; color: var(--hud-dim); text-align: right; letter-spacing: 0.06em; }
+  #status .on { color: var(--warn); }
+  #habitat-nav { margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--hud-faint); display: grid; gap: 3px; color: rgba(173, 224, 212, 0.8); font-size: 10px; letter-spacing: 0.035em; line-height: 1.4; }
+  @media (max-width: 600px) { #habitat-nav { font-size: 9px; max-width: 66vw; } }
+
+  #intro { position: fixed; inset: 0; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 30%, rgba(10, 40, 70, 0.25), rgba(1, 6, 12, 0.78)); z-index: 5; padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); transition: opacity 0.8s; }
+  #intro .card { max-width: 520px; display: grid; gap: 18px; text-align: left; }
+  #intro h1 { font-family: var(--font-display); font-weight: 300; font-size: clamp(34px, 7vw, 58px); line-height: 1.02; margin: 0; color: #f2fbff; text-wrap: balance; }
+  #intro p { margin: 0; font-size: 15px; line-height: 1.6; color: rgba(225, 242, 255, 0.82); max-width: 62ch; }
+  #intro .keys { font-family: var(--font-robo); font-size: 12px; color: var(--hud-dim); display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; }
+  #intro .keys span:nth-child(odd) { color: var(--hud); }
+  #go { justify-self: start; font-family: var(--font-robo); font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase; color: #02101c; background: #cdefff; border: 0; padding: 12px 22px; border-radius: 2px; cursor: pointer; }
+  #go:hover { background: #fff; }
+  #go:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  #go[disabled] { opacity: 0.5; cursor: progress; }
+  #loadmsg { font-family: var(--font-robo); font-size: 11px; color: var(--hud-dim); letter-spacing: 0.1em; }
+
+  #touch { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(40px + env(safe-area-inset-bottom, 0px)); display: none; gap: 8px; grid-template-columns: repeat(3, 52px); z-index: 4; }
+  #touch button { height: 52px; font-family: var(--font-robo); font-size: 12px; color: var(--hud); background: var(--panel); border: 1px solid var(--hud-faint); border-radius: 6px; }
+  @media (pointer: coarse) { #touch { display: grid; } #hint { display: none; } #gauge { width: 90px; } }
+  @media (prefers-reduced-motion: reduce) { #intro, #hint { transition: none; } }
+</style>
+
+<canvas id="c"></canvas>
+
+<div class="hud" id="depthbox" aria-live="off">
+  <div id="feet">DEPTH <b id="ft">0</b> FT</div>
+  <div class="sub" id="meters">0.0 m · 1.00 atm · 18.0 °C</div>
+  <div id="rate">▼ 0.0 ft/s</div>
+  <div id="zone">Surface</div>
+  <div class="sub" id="poi"></div>
+  <div class="sub" id="nav"></div>
+  <div class="sub" id="habitat-nav" aria-label="Directions to reef and cave habitats"></div>
+</div>
+
+<div class="hud" id="gauge" title="Click a zone to jump there"><div class="rail"></div><div class="me" id="me"></div></div>
+
+<div class="hud" id="hint">
+  <kbd>↑</kbd> forward · <kbd>↓</kbd> reverse · <kbd>←</kbd><kbd>→</kbd> turn · <kbd>D</kbd> descend · <kbd>A</kbd> ascend<br>
+  Hold middle mouse to look · <kbd>Shift</kbd> fast · wheel = speed · <kbd>F</kbd> lights · <kbd>M</kbd> sound · <kbd>H</kbd> hide HUD<br>
+  Follow the top-left bearings to coral reefs and ocean caves · <kbd>Shift</kbd> cruise faster · <kbd>T</kbd> time-lapse the sunset<br>
+  In caves, follow teal survey markers to an open exit. On the abyssal plain, follow the strobes to the trench.<br>
+  Inside a wreck you walk its decks: <kbd>A</kbd> kicks up off the floor, <kbd>D</kbd> crouches.<br>
+  Past the Challenger Deep lander there is a square opening in the seabed. Once you are in, it opens every 3 minutes.
+</div>
+<div class="hud" id="status"></div>
+
+<div id="touch" aria-label="Swim controls">
+  <button id="t-up" type="button">RISE</button><button id="t-fwd" type="button">FWD</button><button id="t-light" type="button">LIGHT</button>
+  <button id="t-left" type="button">◀ TURN</button><button id="t-down" type="button">DIVE</button><button id="t-right" type="button">TURN ▶</button>
+</div>
+
+<div id="intro">
+  <div class="card">
+    <h1>Open Ocean Descent</h1>
+    <p>Pilot a deep submersible over colorful coral gardens, through immense flooded limestone caverns, and down a coral-covered mesophotic terrace. Explore the reef banks with turtles, rays, and tropical fish, then descend to five open shipwrecks at 3,800 m and a hadal trench that falls to nearly 11,000 m. Past the lander on the trench floor, something square has been cut into the mud.</p>
+    <div class="keys">
+      <span>↑ / ↓</span><span>drive forward / reverse (hold)</span>
+      <span>← / →</span><span>rotate the submarine left / right</span>
+      <span>D / A</span><span>descend / ascend</span>
+      <span>Inside wrecks</span><span>you walk the decks automatically · A kicks up · D crouches</span>
+      <span>Reefs & caves</span><span>swim there using the distance, bearing, and target depth at the top left</span>
+      <span>Middle mouse</span><span>hold and move the mouse to look around (drag on touch screens)</span>
+      <span>Shift · Wheel</span><span>sprint · change swim speed</span>
+      <span>F</span><span>hull floodlights on/off</span>
+      <span>M · H</span><span>sound · hide HUD</span>
+      <span>T</span><span>time-lapse ×30: the sun sets about 6½ minutes into the dive and it is starry night by 12</span>
+      <span>Below the Deep</span><span>hold D over the square opening to go down · the hatch seals behind you and reopens every 3 minutes · bring a light</span>
+    </div>
+    <button id="go" type="button" disabled>Loading ocean…</button>
+    <div id="loadmsg">Building the water column</div>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="js/main.js"></script>

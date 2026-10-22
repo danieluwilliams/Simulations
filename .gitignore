@@ -1,0 +1,13 @@
+# Local editor settings and preview artifacts
+.vscode/
+artifacts/
+
+# Local dependencies, caches, and secrets
+node_modules/
+__pycache__/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+*.log
