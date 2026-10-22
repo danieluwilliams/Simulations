@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gull animation and audio check</title>
+<style>body{margin:0;font:14px system-ui;background:#739ab5;color:white}canvas{display:block}aside{position:fixed;top:16px;left:16px;background:#102433dc;padding:16px;border-radius:6px}button,select{font:inherit;margin:4px}pre{margin-bottom:0}</style>
+<aside><label>Conditions <select id="conditions"><option value="day">Day</option><option value="dusk">Sunset fade</option><option value="night">Night</option><option value="under">Underwater</option></select></label><button id="sound">Start sound</button><pre id="report"></pre></aside>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { createBirds } from '../js/birds.js';
+import { createAudio } from '../js/audio.js';
+import { DAY } from '../js/common.js';
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x739ab5);
+scene.add(new THREE.HemisphereLight(0xddecff, 0x405366, 2));
+const sun = new THREE.DirectionalLight(0xfff3dc, 3); sun.position.set(-20, 50, -60); scene.add(sun);
+const camera = new THREE.PerspectiveCamera(78, 1, 0.1, 1000);
+camera.position.set(0, 2.2, 0); camera.rotation.x = 0.1; camera.updateMatrixWorld();
+const mods = {}, birds = createBirds({ scene, camera, mods });
+mods.audio = createAudio(birds);
+const condition = document.getElementById('conditions'), sound = document.getElementById('sound'), report = document.getElementById('report');
+let playing = false;
+sound.onclick = () => {
+  if (!playing) { mods.audio.start(); playing = true; }
+  else mods.audio.toggleMute();
+  sound.textContent = mods.audio.muted ? 'Unmute' : 'Mute';
+};
+function resize() { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+let previous = performance.now(), frames = 0, elapsed = 0, time = 0, calls = 0;
+const seen = new Set();
+function frame(now) {
+  const dt = (now - previous) / 1000; previous = now; time += dt;
+  DAY.elevation = condition.value === 'night' ? -12 : condition.value === 'dusk' ? 2.5 : 24;
+  const under = condition.value === 'under';
+  const info = { dt, time, under, depth: under ? 20 : -2.2 };
+  birds.update(info); mods.audio.update(info, 0);
+  for (const b of birds.flock) for (const n of b.notes) if (!seen.has(n)) { seen.add(n); calls++; }
+  renderer.render(scene, camera); frames++; elapsed += dt;
+  if (elapsed >= 0.5) {
+    report.textContent = `${Math.round(frames / elapsed)} fps\nGulls: ${birds.root.visible ? 'visible' : 'hidden'}\nAudio: ${mods.audio.currentTime.toFixed(1)} s\nCall notes scheduled: ${calls}\nCalling birds: ${birds.flock.filter(b => b.beak.rotation.x > 0).length}`;
+    frames = elapsed = 0;
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script></html>
