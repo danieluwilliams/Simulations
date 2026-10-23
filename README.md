@@ -2,6 +2,9 @@
 # DISCLAIMER: MAY LAG/FREEZE ON WEAKER DEVICES, DO NOT RUN IF YOUR UNIT IS NOT STRONG ENOUGH
 # This project is VIBE-CODED
 
+Go to the assets folder and into the "oceanimageproject" file to see what the game looks like.
+The sky changes from afternoon - night on its own.
+
 **[Launch the ocean simulation](https://danieluwilliams.github.io/Simulations/)**
 
 The live site is hosted on GitHub Pages and updates when changes are pushed to `main`.
