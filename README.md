@@ -1,5 +1,6 @@
 # Open Ocean Descent
 # DISCLAIMER: MAY LAG/FREEZE ON WEAKER DEVICES, DO NOT RUN IF YOUR UNIT IS NOT STRONG ENOUGH
+# This project is VIBE-CODED
 
 **[Launch the ocean simulation](https://danieluwilliams.github.io/Simulations/)**
 
